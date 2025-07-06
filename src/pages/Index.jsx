@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { SendIcon, BotIcon, UserIcon, LoaderIcon } from 'lucide-react';
+import { SendIcon, BotIcon, UserIcon, LoaderIcon, UploadIcon } from 'lucide-react';
 import ChatMessage from '@/components/ChatMessage';
 import useChat from '@/hooks/useChat';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import UploadForm from './UploadPage';
 
 const Index = () => {
   const [input, setInput] = useState('');
   const { messages, isLoading, sendMessage } = useChat();
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,11 +20,26 @@ const Index = () => {
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* 标题区域 - 调整为更高级的配色 */}
-      <header className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg py-4 px-6 flex items-center">
-        <div className="bg-gray-700 p-2 rounded-full mr-3">
-          <BotIcon className="h-8 w-8 text-gray-200" />
+      <header className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg py-4 px-6 flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="bg-gray-700 p-2 rounded-full mr-3">
+            <BotIcon className="h-8 w-8 text-gray-200" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-100">AI对话助手</h1>
         </div>
-        <h1 className="text-2xl font-bold text-gray-100">AI对话助手</h1>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition-all">
+              <UploadIcon className="h-5 w-5 mr-2" />上传知识库
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>上传知识库文件</DialogTitle>
+            </DialogHeader>
+            <UploadForm onSuccess={() => setOpen(false)} />
+          </DialogContent>
+        </Dialog>
       </header>
 
       {/* 消息区域 - 替换为简约纹理背景 */}

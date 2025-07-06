@@ -28,6 +28,13 @@ export default defineConfig({
     port: '8080',
     hmr: {
       overlay: false
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8090', // 这里改成你的后端服务地址和端口
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '/api'),
+      }
     }
   },
   plugins: [
